@@ -10,8 +10,9 @@ public class SignupHandler {
 
     private StringBuilder stringBuilder;
     private Gson gson;
-    private String string;
-    private int i;
+    private String l;
+
+
 
     public SignupHandler(StringBuilder stringBuilder){
         this.stringBuilder = stringBuilder;
