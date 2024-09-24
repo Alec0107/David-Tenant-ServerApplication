@@ -1,7 +1,9 @@
 package SERVER.NetworkManager;
 
 import SERVER.Handlers.LoginHandler;
+import SERVER.Handlers.ProductHandler;
 import SERVER.Handlers.SignupHandler;
+import SERVER.Models.ProductListsResponse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,11 +38,10 @@ public class RequestDispatcher implements Runnable {
 
                 headerBuilder.append(line).append("\n");
 
-                if(line.startsWith("POST") || line.startsWith("GET")) {
+                if(line.startsWith("POST") || (line.startsWith("GET")) ) {
                     String[] parts = line.split(" ");
                     method = parts[0];
                     path = parts[1];
-
                 }
 
                 if(line.startsWith("Content-Length:")){
@@ -52,6 +53,7 @@ public class RequestDispatcher implements Runnable {
 
 
             System.out.println("Header: \n" + headerBuilder); // for debugging
+            System.out.println(path);
 
 
             if(contentLength > 0){
@@ -79,8 +81,18 @@ public class RequestDispatcher implements Runnable {
                         writer.println(responseStringLogin);
                         writer.flush();
                         System.out.println(responseStringLogin);
-
                     }
+                    break;
+
+                case "GET":
+                    if("/Products".equals(path)){
+                        ProductHandler productHandler = new ProductHandler();
+                        String responseGetProducts =  productHandler.getProducts();
+                       // writer.println(responseGetProducts);
+                       // writer.flush();
+                        System.out.println(responseGetProducts);
+                    }
+                    break;
 
 
 

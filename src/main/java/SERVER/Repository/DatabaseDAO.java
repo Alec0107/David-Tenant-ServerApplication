@@ -3,10 +3,15 @@ package SERVER.Repository;
 import SERVER.DatabaseConnection.DatabaseConnection;
 import SERVER.Models.Account;
 import SERVER.Models.AuthResponse;
+import SERVER.Models.ProductListsResponse;
+import SERVER.Models.Products;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseDAO {
 
@@ -79,5 +84,36 @@ public class DatabaseDAO {
         }
 
         return null;
+    }
+
+    public ProductListsResponse getProductLists(){
+
+        ProductListsResponse productListsResponse;
+        List<Products> productsList = new ArrayList<>();
+
+            Connection con = DatabaseConnection.getConnection();
+            try {
+                PreparedStatement pstmt = con.prepareStatement("SELECT * FROM products");
+
+                ResultSet rs = pstmt.executeQuery();
+                while(rs.next()){
+
+                    String name        = rs.getString("name");
+                    String description = rs.getString("description");
+                    double price       = rs.getDouble("price");
+                    String image_url   = rs.getString("image_url");
+
+                    Products products = new Products(name, description, price, image_url);
+                    productsList.add(products);
+
+                }
+
+                productListsResponse = new ProductListsResponse("200 OK", productsList);
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+      return productListsResponse;
     }
 }

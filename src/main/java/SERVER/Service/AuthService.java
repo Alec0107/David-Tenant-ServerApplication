@@ -2,6 +2,7 @@ package SERVER.Service;
 
 import SERVER.Models.Account;
 import SERVER.Models.AuthResponse;
+import SERVER.Models.ProductListsResponse;
 import SERVER.Repository.DatabaseDAO;
 
 public class AuthService {
@@ -17,6 +18,10 @@ public class AuthService {
     }
     public AuthResponse loginUser(Account account){
         return databaseDAO.loginUser(account);
+    }
+
+    public ProductListsResponse getProducts(){
+        return databaseDAO.getProductLists();
     }
 
 }
