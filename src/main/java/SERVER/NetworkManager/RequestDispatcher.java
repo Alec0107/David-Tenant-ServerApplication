@@ -88,8 +88,8 @@ public class RequestDispatcher implements Runnable {
                     if("/Products".equals(path)){
                         ProductHandler productHandler = new ProductHandler();
                         String responseGetProducts =  productHandler.getProducts();
-                       // writer.println(responseGetProducts);
-                       // writer.flush();
+                        writer.println(responseGetProducts);
+                        writer.flush();
                         System.out.println(responseGetProducts);
                     }
                     break;

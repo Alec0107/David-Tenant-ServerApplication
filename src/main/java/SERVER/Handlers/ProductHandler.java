@@ -17,21 +17,30 @@ public class ProductHandler {
     }
 
     public String getProducts(){
+        String jsonString = null;
         AuthService authService = new AuthService();
         ProductListsResponse productListsResponse =  authService.getProducts();
 
-        String jsonString = gson.toJson(productListsResponse, ProductListsResponse.class);
+        jsonString = gson.toJson(productListsResponse, ProductListsResponse.class);
 
         StringBuilder responseBuilder = new StringBuilder();
 
-        responseBuilder.append("HTTP/1.1 /GetProductRequest/  200 OK\r\n");
-        responseBuilder.append("Content-Type: application/json\r\n");
-        responseBuilder.append("Content-Length:" + jsonString.length()).append("\r\n");
-        responseBuilder.append("\r\n");
-        responseBuilder.append(jsonString);
+        if(!jsonString.equals(null)){
+             responseBuilder.append("HTTP/1.1 200 OK\r\n");
+             responseBuilder.append("Content-Type: application/json\r\n");
+             responseBuilder.append("Content-Length:" + jsonString.getBytes().length).append("\r\n");
+             responseBuilder.append("\r\n");
+             responseBuilder.append(jsonString);
+             return responseBuilder.toString();
+        }else{
+            responseBuilder.append("HTTP/1.1 400 Bad Request\r\n");
+            responseBuilder.append("Content-Type: application/json\r\n");
+            responseBuilder.append("Content-Length:" + jsonString.length()).append("\r\n");
+            responseBuilder.append("\r\n");
+            responseBuilder.append(jsonString);
+            return responseBuilder.toString();
+        }
 
-
-        return responseBuilder.toString();
     }
 
 

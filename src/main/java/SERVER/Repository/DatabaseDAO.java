@@ -103,7 +103,7 @@ public class DatabaseDAO {
                     double price       = rs.getDouble("price");
                     String image_url   = rs.getString("image_url");
 
-                    Products products = new Products(name, description, price, image_url);
+                    Products products = new Products(name,description, String.valueOf(price), image_url);
                     productsList.add(products);
 
                 }

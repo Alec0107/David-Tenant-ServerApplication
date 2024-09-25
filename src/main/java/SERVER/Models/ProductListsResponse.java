@@ -5,11 +5,11 @@ import java.util.List;
 public class ProductListsResponse {
 
     private String message;
-    private List<Products> products;
+    private List<Products> productLists;
 
-    public ProductListsResponse(String message, List<Products> products) {
+    public ProductListsResponse(String message, List<Products> productLists) {
         this.message = message;
-        this.products = products;
+        this.productLists = productLists;
     }
 
     public String getMessage() {
@@ -21,10 +21,10 @@ public class ProductListsResponse {
     }
 
     public List<Products> getProducts() {
-        return products;
+        return productLists;
     }
 
     public void setProducts(List<Products> products) {
-        this.products = products;
+        this.productLists = products;
     }
 }
