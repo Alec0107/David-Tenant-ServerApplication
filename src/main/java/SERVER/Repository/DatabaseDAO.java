@@ -19,7 +19,7 @@ public class DatabaseDAO {
     public AuthResponse addUser(Account account) {
 
         String username = account.getUsername();
-        String email    = account.getUsername();
+        String email    = account.getEmail();
         String password = account.getPassword();
         PreparedStatement pstmt;
 

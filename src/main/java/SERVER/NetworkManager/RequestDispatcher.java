@@ -96,23 +96,25 @@ public class RequestDispatcher implements Runnable {
 
 
 
-            }
-
-
-
-
-
-
-
-
-
+            }// switch
 
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            throw new RuntimeException(e);}
 
+        finally{
+            closeSocket(); }// Close the client socket
     }
 
+    private void closeSocket(){
+        if(socket != null && !socket.isClosed()){
+            try {
+                socket.close();
+                System.err.println("Client Socket Closed..");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
 }
