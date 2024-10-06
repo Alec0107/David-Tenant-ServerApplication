@@ -2,8 +2,11 @@ package SERVER.Service;
 
 import SERVER.Models.Account;
 import SERVER.Models.AuthResponse;
+import SERVER.Models.CategoryProduct;
 import SERVER.Models.ProductListsResponse;
 import SERVER.Repository.DatabaseDAO;
+
+import java.util.List;
 
 public class AuthService {
 
@@ -22,6 +25,10 @@ public class AuthService {
 
     public ProductListsResponse getProducts(){
         return databaseDAO.getProductLists();
+    }
+
+    public ProductListsResponse getProductCategory(){
+        return databaseDAO.getProductCategory();
     }
 
 }
