@@ -140,17 +140,17 @@ public class DatabaseDAO {
         try{
 
             con = DatabaseConnection.getConnection();
-            pstmt = con.prepareStatement("SELECT p.*, c.name AS category_name FROM product p JOIN category c ON p.category_id = c.id");
+            pstmt = con.prepareStatement("SELECT p.*, c.category_name AS category_name FROM products p JOIN category c ON p.category_id = c.category_id");
 
             rs = pstmt.executeQuery();
 
             while(rs.next()){
-                int id = rs.getInt("id");
+                int id = rs.getInt("product_id");
                 String brand_name = rs.getString("brand_name");
                 String description = rs.getString("description");
                 double price = rs.getDouble("price");
-                int stock = rs.getInt("stock");
-                String editor_note = rs.getString("editor_note");
+                int stock = rs.getInt("stocks");
+                String editor_note = rs.getString("editornote");
                 String image_url = rs.getString("image_url");
                 String category_name = rs.getString("category_name");
 

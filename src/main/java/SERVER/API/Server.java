@@ -1,5 +1,6 @@
 package SERVER.API;
 
+import SERVER.NetworkManager.Dispatcher;
 import SERVER.NetworkManager.RequestDispatcher;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class Server {
                 Socket socket = serverSocket.accept();
                 System.out.println("New Connection from: " + socket.getRemoteSocketAddress() + "\n");
                 ExecutorService executorService = Executors.newSingleThreadExecutor();
-                executorService.execute(new RequestDispatcher(socket));
+                executorService.execute(new Dispatcher(socket));
 
             }
 
