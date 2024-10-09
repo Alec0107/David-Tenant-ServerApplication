@@ -2,23 +2,22 @@ package SERVER.Service;
 
 import SERVER.Models.Account;
 import SERVER.Models.AuthResponse;
-import SERVER.Models.CategoryProduct;
 import SERVER.Models.ProductListsResponse;
 import SERVER.Repository.DatabaseDAO;
 
-import java.util.List;
-
-public class AuthService {
+public class DTService {
 
     private DatabaseDAO databaseDAO;
 
-    public  AuthService(){
+
+    public DTService(){
         this.databaseDAO = new DatabaseDAO();
     }
 
     public AuthResponse addUser(Account account){
         return databaseDAO.addUser(account);
     }
+
     public AuthResponse loginUser(Account account){
         return databaseDAO.loginUser(account);
     }

@@ -23,6 +23,7 @@ public class Dispatcher implements Runnable {
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setPrettyPrinting();
+        gsonBuilder.setLenient(); // Allow lenient parsing
         gson = gsonBuilder.create();
     }
 
@@ -41,7 +42,6 @@ public class Dispatcher implements Runnable {
 
             String line = "";
             String connection = "";
-
             String method = "";
             String path = "";
 
@@ -84,7 +84,11 @@ public class Dispatcher implements Runnable {
 
                 }
 
-               methodHandler(method, path, contentBuilder, writer);
+               // System.out.println(headerbuilder.toString());
+              //  System.out.println(contentBuilder.toString());
+
+                methodHandler(method, path, contentBuilder, writer);
+
 
 
             }// while keepAlive
@@ -109,15 +113,17 @@ public class Dispatcher implements Runnable {
                 if ("/Signup".equals(path)) {
                     SignupHandler signupHandler = new SignupHandler(contentBuilder);
                     String responseStringSignup = signupHandler.handleRequest();
-
-                   // System.out.println(responseStringSignup);
-
+                    writer.println(responseStringSignup);
+                    writer.flush();
+                    System.out.println(responseStringSignup);
 
                 } else if ("/Login".equals(path)) {
                     LoginHandler loginHandler = new LoginHandler(contentBuilder);
                     String responseStringLogin = loginHandler.loginRequest();
-
                     //System.out.println(responseStringLogin);
+                    writer.print(responseStringLogin);
+                    writer.flush();
+
                 }
                 break;
 
@@ -125,9 +131,9 @@ public class Dispatcher implements Runnable {
                 if ("/Products".equals(path)) {
                     ProductHandler productHandler = new ProductHandler();
                     String responseGetProducts = productHandler.getProducts();
-
-                   // System.out.println(responseGetProducts);
-
+                    writer.println(responseGetProducts);
+                    writer.flush();
+                    System.out.println(responseGetProducts);
 
                 } else if ("/ProductCategories".equals(path)) {
 
@@ -162,18 +168,18 @@ public class Dispatcher implements Runnable {
 
 
                               // Write the size of the chunk followed by CRLF
-                             // writer.write(hexSize + "\r\n");
-                              System.out.print(hexSize + "\r\n");
+                              writer.write(hexSize + "\r\n");
+                              //System.out.print(hexSize + "\r\n");
                               // Write the chunk data followed by CRLF
-                              //writer.write(chunk + "\r\n");
-                              System.out.print(chunk + "\r\n");
-                              //writer.flush(); // Flush after each chunk (optional)
+                              writer.write(chunk + "\r\n");
+                              //System.out.print(chunk + "\r\n");
+                              writer.flush(); // Flush after each chunk (optional)
                           }
 
                             // Write the terminating chunk
-                            //writer.write("0\r\n\r\n"); // Final chunk with size 0 followed by CRLF
-                            System.out.println("0\r\n\r\n");
-                            //writer.flush();
+                            writer.write("0\r\n\r\n"); // Final chunk with size 0 followed by CRLF
+                            //System.out.println("0\r\n\r\n");
+                            writer.flush();
 
 
                         }
@@ -203,18 +209,3 @@ public class Dispatcher implements Runnable {
 
 
 
-/*
-
-                        //Send the data in chunks
-                        int chunkSize = 1024;
-                        int offset = 0;
-
-                        while (offset < jsonData.length()) {
-
-                            int bytesToRead = Math.min(chunkSize, jsonData.length() - offset);
-                            String chunk = jsonData.substring(offset, offset + bytesToRead);
-                            offset += bytesToRead;
-
-                            String hexSize = Integer.toHexString(bytesToRead);
-
-*/

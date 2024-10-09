@@ -49,4 +49,8 @@ public class Account {
                 ", password='" + password + '\'' +
                 '}';
     }
+
+    public String display(){
+        return " Email: " + email + ", Password: " + password;
+    }
 }

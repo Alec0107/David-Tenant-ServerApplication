@@ -58,6 +58,8 @@ public class DatabaseDAO {
 
     public AuthResponse loginUser(Account account)  {
 
+        AuthResponse authResponse = null;
+
         String email    = account.getEmail();
         String password = account.getPassword();
 
@@ -76,10 +78,10 @@ public class DatabaseDAO {
             if (rs.next()) {
 
                 String username = rs.getString("username"); // Get the username from the ResultSet
+                authResponse = new AuthResponse( true, "Hello and Welcome, " + username);
 
-                return new AuthResponse(true, "Hello and Welcome, " + username);
             }else{
-                return new AuthResponse(false, "No account associated with this email. Sign up to create an account. ");
+                authResponse = new AuthResponse( false, "No account associated with this email. Sign up to create an account. ");
             }
 
         }catch(Exception e){
@@ -88,7 +90,7 @@ public class DatabaseDAO {
             closeResources(con, pstmt, rs);
         }
 
-        return null;
+        return authResponse;
     }
 
     public ProductListsResponse getProductLists(){

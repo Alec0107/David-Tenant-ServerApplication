@@ -2,11 +2,9 @@ package SERVER.Handlers;
 
 import SERVER.Models.Account;
 import SERVER.Models.AuthResponse;
-import SERVER.Service.AuthService;
+import SERVER.Service.DTService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import javax.print.DocFlavor;
 
 public class LoginHandler {
 
@@ -17,6 +15,7 @@ public class LoginHandler {
         this.contentBuilder = contentBuilder;
 
         GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setLenient(); // Allow lenient parsing
         gsonBuilder.setPrettyPrinting();
         this.gson = gsonBuilder.create();
     }
@@ -25,12 +24,16 @@ public class LoginHandler {
 
     public String loginRequest(){
 
-        Account account = gson.fromJson(String.valueOf(contentBuilder), Account.class);
-        System.out.println("LOGIN HANDLER: \n" + account.getEmail() + "\n" + account.getPassword());
+       Account account =  gson.fromJson(contentBuilder.toString().trim(), Account.class);
 
-        AuthService authService = new AuthService();
+        //System.out.println("LOGINHANDLER");
+        //System.out.println(gson.toJson(account));
+
+        DTService authService = new DTService();
         AuthResponse loginResponse = authService.loginUser(account);
         String jsonString = gson.toJson(loginResponse, AuthResponse.class);
+
+       // System.out.println(jsonString);
 
         StringBuilder responseBuilder = new StringBuilder();
 

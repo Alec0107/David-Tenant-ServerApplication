@@ -1,7 +1,7 @@
 package SERVER.Handlers;
 
 import SERVER.Models.ProductListsResponse;
-import SERVER.Service.AuthService;
+import SERVER.Service.DTService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -18,7 +18,7 @@ public class ProductHandler {
 
     public String getProducts(){
         String jsonString = null;
-        AuthService authService = new AuthService();
+        DTService authService = new DTService();
         ProductListsResponse productListsResponse =  authService.getProducts();
 
         jsonString = gson.toJson(productListsResponse, ProductListsResponse.class);

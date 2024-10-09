@@ -1,19 +1,13 @@
 package SERVER.Handlers;
 
-import SERVER.Models.CategoryProduct;
 import SERVER.Models.ProductListsResponse;
-import SERVER.Service.AuthService;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
+import SERVER.Service.DTService;
 
 public class CategoryProductHandler {
 
 
     public ProductListsResponse response() {
-        AuthService authService = new AuthService();
+        DTService authService = new DTService();
 
         ProductListsResponse productListsResponse = authService.getProductCategory();
 

@@ -2,7 +2,7 @@ package SERVER.Handlers;
 
 import SERVER.Models.Account;
 import SERVER.Models.AuthResponse;
-import SERVER.Service.AuthService;
+import SERVER.Service.DTService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -18,6 +18,7 @@ public class SignupHandler {
         this.stringBuilder = stringBuilder;
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setPrettyPrinting();
+        gsonBuilder.setLenient(); // Allow lenient parsing
         gson = gsonBuilder.create();
 
     }
@@ -25,7 +26,7 @@ public class SignupHandler {
     public String handleRequest(){
 
         Account acc = gson.fromJson(String.valueOf(stringBuilder), Account.class);
-        AuthService authService = new AuthService();
+        DTService authService = new DTService();
 
         AuthResponse signupResponse = authService.addUser(acc);
         String jsonString = gson.toJson(signupResponse, AuthResponse.class);
