@@ -24,12 +24,15 @@ public class SignupHandler {
     }
 
     public String handleRequest(){
-
-        Account acc = gson.fromJson(String.valueOf(stringBuilder), Account.class);
         DTService authService = new DTService();
+        String accString = stringBuilder.toString().trim();
+        //System.out.println(accString);
+        Account acc = gson.fromJson(accString, Account.class);
 
         AuthResponse signupResponse = authService.addUser(acc);
+
         String jsonString = gson.toJson(signupResponse, AuthResponse.class);
+
 
         StringBuilder responseBuilder = new StringBuilder();
 
@@ -48,7 +51,6 @@ public class SignupHandler {
             responseBuilder.append(jsonString);
             return responseBuilder.toString();
         }
-
 
     }
 

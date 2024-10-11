@@ -81,7 +81,6 @@ public class Dispatcher implements Runnable {
                     reader.read(bodyChars, 0, contentLength);
                     String body = new String(bodyChars);
                     contentBuilder.append(body);
-
                 }
 
                // System.out.println(headerbuilder.toString());
@@ -111,11 +110,12 @@ public class Dispatcher implements Runnable {
 
             case "POST":
                 if ("/Signup".equals(path)) {
+
                     SignupHandler signupHandler = new SignupHandler(contentBuilder);
                     String responseStringSignup = signupHandler.handleRequest();
                     writer.println(responseStringSignup);
                     writer.flush();
-                    System.out.println(responseStringSignup);
+                    //System.out.println(responseStringSignup);
 
                 } else if ("/Login".equals(path)) {
                     LoginHandler loginHandler = new LoginHandler(contentBuilder);
@@ -168,7 +168,7 @@ public class Dispatcher implements Runnable {
 
 
                               // Write the size of the chunk followed by CRLF
-                              writer.write(hexSize + "\r\n");
+                              writer.write("Hex:" + hexSize + "\r\n");
                               //System.out.print(hexSize + "\r\n");
                               // Write the chunk data followed by CRLF
                               writer.write(chunk + "\r\n");

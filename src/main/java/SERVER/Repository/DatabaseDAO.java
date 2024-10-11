@@ -30,6 +30,7 @@ public class DatabaseDAO {
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 // User already exists
+                //System.out.println("User already exists");
                 return new AuthResponse( true, "User already exists.");
 
             }else{
@@ -40,6 +41,7 @@ public class DatabaseDAO {
 
                 int rowsAffected =  pstmt.executeUpdate();
                 if (rowsAffected > 0) {
+                    //System.out.println("User added successfully");
                     return new AuthResponse( false,"User added successfully.");
                 } else {
                     return new AuthResponse( false, "Error adding user.");
