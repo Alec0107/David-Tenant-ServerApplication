@@ -13,4 +13,9 @@ public class GsonHelper{
         this.gson = gsonBuilder.create();
     }
 
+    public Gson getGson() {
+        return gson;
+    }
+
+
 }

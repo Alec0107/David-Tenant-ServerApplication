@@ -1,5 +1,6 @@
 package SERVER.Handlers;
 
+import SERVER.Gson.GsonHelper;
 import SERVER.Models.Account;
 import SERVER.Models.AuthResponse;
 import SERVER.Service.DTService;
@@ -8,16 +9,13 @@ import com.google.gson.GsonBuilder;
 
 public class LoginHandler {
 
-    private StringBuilder contentBuilder;
+    private GsonHelper gsonHelper = new GsonHelper();
     private Gson gson;
+    private StringBuilder contentBuilder;
 
     public LoginHandler(StringBuilder contentBuilder) {
         this.contentBuilder = contentBuilder;
-
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setLenient(); // Allow lenient parsing
-        gsonBuilder.setPrettyPrinting();
-        this.gson = gsonBuilder.create();
+        this.gson = gsonHelper.getGson();
     }
 
 

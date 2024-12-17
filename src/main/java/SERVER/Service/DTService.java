@@ -1,18 +1,28 @@
 package SERVER.Service;
 
-import SERVER.Models.Account;
-import SERVER.Models.AuthResponse;
-import SERVER.Models.ProductListsResponse;
+import SERVER.Models.*;
+import SERVER.Models.ProductModels.Product;
 import SERVER.Repository.DatabaseDAO;
+
+import java.util.List;
 
 public class DTService {
 
     private DatabaseDAO databaseDAO;
+    private ProductCache productCache;
 
 
     public DTService(){
         this.databaseDAO = new DatabaseDAO();
+        this.productCache = ProductCache.getInstance();
     }
+
+
+    public List<Product> fetchProducts(){
+        return databaseDAO.fetchProducts();
+    }
+
+
 
     public AuthResponse addUser(Account account){
         return databaseDAO.addUser(account);
@@ -27,7 +37,15 @@ public class DTService {
     }
 
     public ProductListsResponse getProductCategory(){
-        return databaseDAO.getProductCategory();
+       return productCache.getProductListResponse();
+    }
+
+    public boolean addToCart(Cart cart){
+       return databaseDAO.saveProductCart(cart);
+    }
+
+    public CartResponse getCartProducts(int userId){
+        return databaseDAO.getCartProducts(userId);
     }
 
 }
