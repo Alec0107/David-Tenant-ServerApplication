@@ -1,6 +1,6 @@
 package SERVER.hashing_token_encrypt;
 
-import SERVER.Models.UserDetails;
+import OLD.UserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

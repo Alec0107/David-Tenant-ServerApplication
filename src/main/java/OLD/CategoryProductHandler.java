@@ -1,6 +1,5 @@
-package SERVER.Handlers;
+package OLD;
 
-import SERVER.Models.ProductListsResponse;
 import SERVER.Service.DTService;
 
 public class CategoryProductHandler {

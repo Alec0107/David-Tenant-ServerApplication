@@ -1,12 +1,13 @@
 package SERVER.Repository;
 
+import OLD.*;
+import SERVER.Models.Account;
 import SERVER.DatabaseConnection.DatabaseConnection;
-import SERVER.Models.*;
-import SERVER.Models.ProductModels.Product;
+import SERVER.Models.EmailVerificationToken;
+import SERVER.Models.Product;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.springframework.security.core.userdetails.User;
 
 import java.lang.reflect.Type;
 import java.sql.*;
@@ -255,9 +256,9 @@ public class DatabaseDAO {
 
 
 
-     public int insertClient(String username, String email, String hashedPassword){
+     public int insertClient(String username, String email, String hashedPassword, String firstName, String lastName){
 
-         String query = "INSERT INTO clientaccount (username, email, password_hash) VALUES (?, ?, ?)";
+         String query = "INSERT INTO clientaccount (username, email, password_hash, first_name, last_name, is_verified) VALUES (?, ?, ?, ?, ?, ?)";
 
          Connection con = null;
          PreparedStatement pstmt = null;
@@ -270,6 +271,9 @@ public class DatabaseDAO {
              pstmt.setString(1, username);
              pstmt.setString(2, email);
              pstmt.setString(3, hashedPassword);
+             pstmt.setString(4, firstName);
+             pstmt.setString(5, lastName);
+             pstmt.setBoolean(6, false);
 
              pstmt.executeUpdate();
 
@@ -279,14 +283,14 @@ public class DatabaseDAO {
              }
 
          } catch (Exception e) {
-             throw new RuntimeException(e);
+             e.printStackTrace();
+             System.out.println(e.getMessage());
          }
-
          return 0;
      }
 
 
-     public void insertToken(int useriD, String token, Date expiryDate){
+     public void insertJWTToken(int useriD, String token, Date expiryDate){
 
          Connection con = null;
          PreparedStatement pstmt = null;
@@ -302,7 +306,7 @@ public class DatabaseDAO {
              int count = pstmt.executeUpdate();
 
              if(count > 0){
-                 System.out.println("Inserted " + count + " token");
+                 System.out.println("Inserted " + count + " JWT Token");
              }
 
          }catch (SQLException ex){
@@ -310,6 +314,94 @@ public class DatabaseDAO {
          }
 
      }
+
+     public void insertEmailToken(int userId, String verificationToken, Date expiryDate){
+         Connection con = null;
+         PreparedStatement pstmt = null;
+
+         try{
+             con = DatabaseConnection.getConnection();
+             pstmt = con.prepareStatement("INSERT INTO email_verification_tokens(user_id, token, expiration_time) VALUES (?, ?, ?)");
+
+             pstmt.setInt(1, userId);
+             pstmt.setString(2, verificationToken);
+             pstmt.setTimestamp(3, new Timestamp(expiryDate.getTime()));
+             int count = pstmt.executeUpdate();
+
+             if(count > 0){
+                 System.out.println("Inserted " + count + " Email Verification Token");
+             }
+
+         }catch (SQLException ex){
+             ex.printStackTrace();
+         }
+
+     }
+
+     public EmailVerificationToken getEmailVerificationToken(String token){
+       String query = "SELECT * FROM email_verification_tokens WHERE token = ?";
+
+         Connection con = null;
+         PreparedStatement pstmt = null;
+
+         try{
+             con = DatabaseConnection.getConnection();
+             pstmt = con.prepareStatement(query);
+
+             pstmt.setString(1, token);
+             ResultSet rs = pstmt.executeQuery();
+             if(rs.next()){
+                 return new EmailVerificationToken(rs.getInt("user_id"), rs.getString("token"), rs.getDate("expiration_time"));
+             }
+
+         }catch (SQLException ex){
+             ex.printStackTrace();
+         }
+
+         return null;
+     }
+
+     public void markUserAsVerified(int userID) {
+         String query = "UPDATE clientaccount SET is_verified = ? WHERE user_id = ?";
+
+         Connection con = null;
+         PreparedStatement pstmt = null;
+
+         try {
+             con = DatabaseConnection.getConnection();
+             pstmt = con.prepareStatement(query);
+
+             pstmt.setBoolean(1, true);
+             pstmt.setInt(2, userID);
+
+             pstmt.executeUpdate();
+         } catch (SQLException ex) {
+             ex.printStackTrace();
+         }
+     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

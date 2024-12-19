@@ -1,7 +1,6 @@
-package SERVER.ADMIN;
+package SERVER.API;
 
-import SERVER.Models.ProductModels.Product;
-import SERVER.Models.Products;
+import SERVER.Models.Product;
 import SERVER.Repository.DatabaseDAO;
 
 import java.util.List;

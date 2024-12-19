@@ -27,6 +27,8 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
+    // Spring Boot Starter Mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.projectlombok:lombok:1.18.28' // Use the latest version of Lombok
     annotationProcessor 'org.projectlombok:lombok:1.18.28' // Required for annotation processing
     implementation 'org.springframework.boot:spring-boot-starter-security' // BCryptPasswordEncoder
@@ -41,3 +43,5 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+

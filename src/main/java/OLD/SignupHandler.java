@@ -1,7 +1,6 @@
-package SERVER.Handlers;
+package OLD;
 
 import SERVER.Models.Account;
-import SERVER.Models.AuthResponse;
 import SERVER.Service.DTService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

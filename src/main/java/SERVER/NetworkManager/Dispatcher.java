@@ -1,17 +1,14 @@
 package SERVER.NetworkManager;
 
-import SERVER.Handlers.*;
-import SERVER.Models.Cart;
-import SERVER.Models.CartResponse;
-import SERVER.Models.ProductListsResponse;
-import SERVER.Models.ProductModels.Product;
+import OLD.*;
+import OLD.CartResponse;
+import OLD.ProductListsResponse;
+import SERVER.Models.Product;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.*;
-import java.net.FileNameMap;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -94,7 +91,7 @@ public class Dispatcher implements Runnable {
 
                  System.out.println(headerbuilder.toString());
                 //System.out.println(contentBuilder.toString());
-                AuthHandler authHandler = new AuthHandler();
+                //AuthHandler authHandler = new AuthHandler();
                 ExecutorService executorService = Executors.newSingleThreadExecutor();
                 //executorService.execute(authHandler);
 

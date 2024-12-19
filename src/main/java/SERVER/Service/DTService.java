@@ -1,7 +1,8 @@
 package SERVER.Service;
 
-import SERVER.Models.*;
-import SERVER.Models.ProductModels.Product;
+import OLD.*;
+import SERVER.Models.Account;
+import SERVER.Models.Product;
 import SERVER.Repository.DatabaseDAO;
 
 import java.util.List;

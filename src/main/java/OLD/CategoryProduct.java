@@ -1,4 +1,4 @@
-package SERVER.Models;
+package OLD;
 
 public class CategoryProduct {
 

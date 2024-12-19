@@ -1,6 +1,4 @@
-package SERVER.Models.ProductModels;
-
-import SERVER.Repository.DatabaseDAO;
+package SERVER.Models;
 
 import java.util.List;
 

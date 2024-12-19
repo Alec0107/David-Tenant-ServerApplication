@@ -1,105 +1,85 @@
 package SERVER.Handlers;
 
-import SERVER.Models.UserDetails;
+import SERVER.Models.Account;
+import SERVER.Models.EmailVerificationToken;
 import SERVER.Repository.DatabaseDAO;
+import SERVER.Service.EmailService;
+import SERVER.Service.MailServiceInstance;
 import SERVER.hashing_token_encrypt.JWTUtil;
 import SERVER.hashing_token_encrypt.PasswordUtil;
-import org.springframework.security.access.method.P;
 
 import java.util.Date;
-import java.util.Scanner;
+import java.util.UUID;
 
-public class AuthHandler{
 
-    private static Scanner scanner = new Scanner(System.in);
-    private String username;
-    private String email;
-    private String password;
+public class AuthHandler {
 
-    public UserDetails test() {
+    private final EmailService emailService = new EmailService(MailServiceInstance.getEmailSender());
 
-        System.out.println("Enter username: ");
-        username = scanner.nextLine();
-        System.out.println("Enter email: ");
-        email = scanner.nextLine();
-        System.out.println("Enter password: ");
-        password = scanner.nextLine();
 
-        String hashedPassword = PasswordUtil.hashPassword(password);
+    public void registerUser(Account userAccount) {
 
-        UserDetails userDetails = new UserDetails(username, email, hashedPassword);
+        Account account = userAccount;
 
-        return userDetails;
+        String username = userAccount.getUsername();
+        String email = userAccount.getEmail();
+        String firstName = userAccount.getFirstName();
+        String lastName = userAccount.getLastName();
+        String hashedPassword = PasswordUtil.hashPassword(userAccount.getPassword());
+
+        DatabaseDAO databaseDAO = new DatabaseDAO();
+        int userId = databaseDAO.insertClient(username, email, hashedPassword, firstName, lastName);
+        System.out.println("User ID: " + userId);
+
+        createJWTToken(userId);
+        createEmailToken(userId, firstName, email);
+
     }
 
-}
+    public void createJWTToken(int userId) {
+        JWTUtil jwtUtil = new JWTUtil();
+        String token = jwtUtil.generateToken(userId);
+        System.out.println("Token: " + token);
+        DatabaseDAO databaseDAO = new DatabaseDAO();
 
-class Test{
-    private static Scanner scanner = new Scanner(System.in);
-    private static DatabaseDAO databaseDAO = new DatabaseDAO();
+        Date expirationDate = new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000);
+        databaseDAO.insertJWTToken(userId, token, expirationDate);
 
-    public static void main(String[] args) {
-        System.out.print("Enter choice: ");
-        int choice = scanner.nextInt(); scanner.nextLine();
+    }
+    public void createEmailToken(int userId, String name,  String email) {
+        String verificationToken = UUID.randomUUID().toString();
 
-        if(choice == 1) {
-            register();
-        }else{
-            login();
+        DatabaseDAO databaseDAO = new DatabaseDAO();
+        Date expirationDate = new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000);// 24HRS
+        databaseDAO.insertEmailToken(userId, verificationToken, expirationDate);
+
+        emailService.sendVerificationEmail(email, name, verificationToken);
+    }
+
+    public boolean verifyEmailToken(String token) {
+        DatabaseDAO databaseDAO = new DatabaseDAO();
+
+        // Retrieve the Token Details
+        EmailVerificationToken verificationToken = databaseDAO.getEmailVerificationToken(token);
+
+        if(verificationToken == null) {
+            System.out.println("Invalid Token");
+            return false;
         }
 
-    }
-
-
-    public static void login(){
-        System.out.println("Enter token: ");
-        String token = scanner.nextLine();
-        UserDetails userDetails = databaseDAO.getUserDetails(token.trim());
-        System.out.println(userDetails.toString());
-
-
-        boolean isValid = JWTUtil.isTokenValid(token, userDetails);
-        if(isValid){
-            System.out.println("Login successful");
-        }else {
-            System.out.println("Login failed");
+        // Check if the token has expired
+        if(verificationToken.getExpiryTime().before(new Date(System.currentTimeMillis()))){
+            System.out.println("Token Expired");
+            return false;
         }
 
-
+        // Mark the user as verified
+        databaseDAO.markUserAsVerified(verificationToken.getUserId());
+        return true;
     }
 
-    public static void register(){
-        AuthHandler authHandler = new AuthHandler();
-        databaseDAO = new DatabaseDAO();
-
-        UserDetails userDetails = authHandler.test();
-
-        //System.out.println(userDetails.getUsername());
-        //System.out.println(userDetails.getEmail());
-        //System.out.println(userDetails.getPassword());
-
-        int userId =  databaseDAO.insertClient(userDetails.getUsername(), userDetails.getEmail(), userDetails.getPassword());
-
-        String token = JWTUtil.generateToken(userId);
-        Date expiry = new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000);
-        databaseDAO.insertToken(userId, token, expiry);
-        UserDetails userDetails1 = databaseDAO.getUserDetails(token.trim());
 
 
-        System.out.println("Validate token? ");
-        String choice = scanner.nextLine();
 
-        if("yes".equals(choice)){
-            System.out.println("Enter token: ");
-            token = scanner.nextLine();
-
-
-            if(JWTUtil.isTokenValid(token, userDetails1)){
-                System.out.println("Token is valid");
-            }else {
-                System.out.println("Login failed");
-            }
-        }
-    }
 }
 
